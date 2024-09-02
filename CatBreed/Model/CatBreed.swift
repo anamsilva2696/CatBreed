@@ -10,11 +10,13 @@ import Foundation
 struct CatBreed: Codable, Identifiable {
     let id: String
     let name: String
+    let description: String
     let referenceImageId: String?
     
     enum CodingKeys: String, CodingKey {
             case id
             case name
+            case description
             case referenceImageId = "reference_image_id"
     }
 }

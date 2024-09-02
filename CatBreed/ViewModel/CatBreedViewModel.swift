@@ -41,7 +41,7 @@ class CatBreedViewModel: ObservableObject {
                                     } else {
                                         // Save new breed if it doesn't exist
                                         let isFavouriteBreed = favouriteBreeds.contains { $0.imageId == breed.referenceImageId }
-                                        return self.saveBreedsToCoreData(id: breed.id, name: breed.name, imageURL: detail?.absoluteString, referenceImageId: breed.referenceImageId ?? "", isFavourite: isFavouriteBreed)
+                                        return self.saveBreedsToCoreData(id: breed.id, name: breed.name, imageURL: detail?.absoluteString, referenceImageId: breed.referenceImageId ?? "", isFavourite: isFavouriteBreed, description: breed.description)
                                     }
                                 }
                                 .eraseToAnyPublisher()
@@ -61,13 +61,14 @@ class CatBreedViewModel: ObservableObject {
     }
 
    
-    private func saveBreedsToCoreData(id: String, name: String, imageURL: String?, referenceImageId: String, isFavourite: Bool = false) -> Item {
+    private func saveBreedsToCoreData(id: String, name: String, imageURL: String?, referenceImageId: String, isFavourite: Bool = false, description: String) -> Item {
             let item = Item(context: context)
             item.id = id
             item.name = name
             item.imageURL = imageURL
             item.referenceImageId = referenceImageId
             item.isFavourite = isFavourite
+            item.breedDescription = description
 
         do {
             try context.save()

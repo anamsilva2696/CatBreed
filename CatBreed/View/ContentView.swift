@@ -33,24 +33,26 @@ struct ContentView: View {
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(viewModel.items, id: \.self) { item in
-                                VStack {
-                                    if let imageURLString = item.imageURL, let imageURL = URL(string: imageURLString) {
-                                        URLImage(url: imageURL)
-                                            .frame(width: 100, height: 100)
-                                            .clipped()
-                                            .cornerRadius(10)
-                                    }
-                                    HStack {
-                                        Text(item.name ?? "Unknown Name")
-                                            .font(.caption)
-                                            .lineLimit(1)
-                                        
-                                        Button(action: {
-                                            viewModel.toggleFavorite(for: item)
-                                        }) {
-                                            Image(systemName: item.isFavourite ? "star.fill" : "star")
-                                            .foregroundColor(item.isFavourite ? .yellow : .gray)
-                                            .padding(5)
+                                NavigationLink(destination: BreedDetailView(viewModel: viewModel, breed: item)) {
+                                    VStack {
+                                        if let imageURLString = item.imageURL, let imageURL = URL(string: imageURLString) {
+                                            URLImage(url: imageURL)
+                                                .frame(width: 100, height: 100)
+                                                .clipped()
+                                                .cornerRadius(10)
+                                        }
+                                        HStack {
+                                            Text(item.name ?? "Unknown Name")
+                                                .font(.caption)
+                                                .lineLimit(1)
+                                            
+                                            Button(action: {
+                                                viewModel.toggleFavorite(for: item)
+                                            }) {
+                                                Image(systemName: item.isFavourite ? "star.fill" : "star")
+                                                .foregroundColor(item.isFavourite ? .yellow : .gray)
+                                                .padding(5)
+                                            }
                                         }
                                     }
                                 }

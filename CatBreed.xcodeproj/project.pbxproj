@@ -20,6 +20,7 @@
 		84DBF9B82C84DA4C003E07C8 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9B72C84DA4C003E07C8 /* NetworkService.swift */; };
 		84DBF9BD2C852E4F003E07C8 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9BC2C852E4E003E07C8 /* URLImage.swift */; };
 		84DBF9C52C854CFC003E07C8 /* FavouriteBreed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9C42C854CFC003E07C8 /* FavouriteBreed.swift */; };
+		84DBF9CD2C86763F003E07C8 /* BreedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9CC2C86763E003E07C8 /* BreedDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		84DBF9B72C84DA4C003E07C8 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		84DBF9BC2C852E4E003E07C8 /* URLImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
 		84DBF9C42C854CFC003E07C8 /* FavouriteBreed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteBreed.swift; sourceTree = "<group>"; };
+		84DBF9CC2C86763E003E07C8 /* BreedDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 			children = (
 				84DBF9722C834AC0003E07C8 /* ContentView.swift */,
 				84DBF9BC2C852E4E003E07C8 /* URLImage.swift */,
+				84DBF9CC2C86763E003E07C8 /* BreedDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 			files = (
 				84DBF9AD2C84D818003E07C8 /* CatBreedViewModel.swift in Sources */,
 				84DBF97A2C834AC1003E07C8 /* Persistence.swift in Sources */,
+				84DBF9CD2C86763F003E07C8 /* BreedDetailView.swift in Sources */,
 				84DBF9732C834AC0003E07C8 /* ContentView.swift in Sources */,
 				84DBF9B32C84D955003E07C8 /* CatBreed.swift in Sources */,
 				84DBF9712C834AC0003E07C8 /* CatBreedApp.swift in Sources */,
