@@ -16,6 +16,9 @@
 		84DBF9882C834AC2003E07C8 /* CatBreedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9872C834AC2003E07C8 /* CatBreedTests.swift */; };
 		84DBF9932C834AC2003E07C8 /* CatBreedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9922C834AC2003E07C8 /* CatBreedUITests.swift */; };
 		84DBF9AD2C84D818003E07C8 /* CatBreedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9AC2C84D818003E07C8 /* CatBreedViewModel.swift */; };
+		84DBF9B32C84D955003E07C8 /* CatBreed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9B22C84D954003E07C8 /* CatBreed.swift */; };
+		84DBF9B82C84DA4C003E07C8 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9B72C84DA4C003E07C8 /* NetworkService.swift */; };
+		84DBF9BD2C852E4F003E07C8 /* URLImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DBF9BC2C852E4E003E07C8 /* URLImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +54,9 @@
 		84DBF9922C834AC2003E07C8 /* CatBreedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatBreedUITests.swift; sourceTree = "<group>"; };
 		84DBF9942C834AC2003E07C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84DBF9AC2C84D818003E07C8 /* CatBreedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatBreedViewModel.swift; sourceTree = "<group>"; };
+		84DBF9B22C84D954003E07C8 /* CatBreed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatBreed.swift; sourceTree = "<group>"; };
+		84DBF9B72C84DA4C003E07C8 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		84DBF9BC2C852E4E003E07C8 /* URLImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +149,7 @@
 			children = (
 				84DBF9792C834AC1003E07C8 /* Persistence.swift */,
 				84DBF97B2C834AC1003E07C8 /* CatBreed.xcdatamodeld */,
+				84DBF9B22C84D954003E07C8 /* CatBreed.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -151,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				84DBF9722C834AC0003E07C8 /* ContentView.swift */,
+				84DBF9BC2C852E4E003E07C8 /* URLImage.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -159,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				84DBF9AC2C84D818003E07C8 /* CatBreedViewModel.swift */,
+				84DBF9B72C84DA4C003E07C8 /* NetworkService.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -295,8 +304,11 @@
 				84DBF9AD2C84D818003E07C8 /* CatBreedViewModel.swift in Sources */,
 				84DBF97A2C834AC1003E07C8 /* Persistence.swift in Sources */,
 				84DBF9732C834AC0003E07C8 /* ContentView.swift in Sources */,
+				84DBF9B32C84D955003E07C8 /* CatBreed.swift in Sources */,
 				84DBF9712C834AC0003E07C8 /* CatBreedApp.swift in Sources */,
 				84DBF97D2C834AC1003E07C8 /* CatBreed.xcdatamodeld in Sources */,
+				84DBF9B82C84DA4C003E07C8 /* NetworkService.swift in Sources */,
+				84DBF9BD2C852E4F003E07C8 /* URLImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
