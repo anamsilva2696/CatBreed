@@ -24,39 +24,50 @@ class CatBreedViewModel: ObservableObject {
     }
     
     func fetchBreeds() {
-            networkService.fetchBreeds()
-                .flatMap { items -> AnyPublisher<Item, Error> in
-                    let publishers = items.map { breed -> AnyPublisher<Item, Error> in
-                        self.networkService.fetchImageURL(for: breed.referenceImageId ?? "")
-                            .map { detail in
-                                // Check if the breed already exists in Core Data
-                                if let existingBreed = self.fetchBreedFromCoreData(by: breed.referenceImageId ?? "") {
-                                    self.updateBreed(existingBreed, with: detail)
-                                    return existingBreed
-                                } else {
-                                    // Save new breed if it doesn't exist
-                                    return self.saveBreedsToCoreData(id: breed.id, name: breed.name, imageURL: detail?.absoluteString, referenceImageId: breed.referenceImageId ?? "")
+        networkService.fetchBreeds()
+            .flatMap { items -> AnyPublisher<Item, Error> in
+                return self.networkService.fetchFavouriteBreeds()
+                    .flatMap { favouriteBreeds -> AnyPublisher<Item, Error> in
+                        let publishers = items.map { breed -> AnyPublisher<Item, Error> in
+                            self.networkService.fetchImageURL(for: breed.referenceImageId ?? "")
+                                .map { detail in
+                                    // Check if the breed already exists in Core Data
+                                    if let existingBreed = self.fetchBreedFromCoreData(by: breed.id) {
+                                        // Update the existing breed
+                                        let isFavouriteBreed = favouriteBreeds.contains { $0.imageId == breed.referenceImageId }
+                                        
+                                        self.updateBreed(existingBreed, with: detail, isFavourite: isFavouriteBreed)
+                                        return existingBreed
+                                    } else {
+                                        // Save new breed if it doesn't exist
+                                        let isFavouriteBreed = favouriteBreeds.contains { $0.imageId == breed.referenceImageId }
+                                        return self.saveBreedsToCoreData(id: breed.id, name: breed.name, imageURL: detail?.absoluteString, referenceImageId: breed.referenceImageId ?? "", isFavourite: isFavouriteBreed)
+                                    }
                                 }
-                            }
-                            .eraseToAnyPublisher()
+                                .eraseToAnyPublisher()
+                        }
+                        return Publishers.MergeMany(publishers).eraseToAnyPublisher()
                     }
-                    return Publishers.MergeMany(publishers).eraseToAnyPublisher()
+                    .eraseToAnyPublisher()
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.errorMessage = error.localizedDescription
                 }
-                .sink(receiveCompletion: { [weak self] completion in
-                    if case .failure(let error) = completion {
-                        self?.errorMessage = error.localizedDescription
-                    }
-                    self?.fetchBreedsFromCoreData() // Refresh data from Core Data
-                }, receiveValue: { _ in })
-                .store(in: &cancellables)
-        }
+                self?.fetchBreedsFromCoreData() // Refresh data from Core Data
+            }, receiveValue: { _ in })
+            .store(in: &cancellables)
+    }
+
    
-    private func saveBreedsToCoreData(id: String, name: String, imageURL: String?, referenceImageId: String) -> Item {
+    private func saveBreedsToCoreData(id: String, name: String, imageURL: String?, referenceImageId: String, isFavourite: Bool = false) -> Item {
             let item = Item(context: context)
             item.id = id
             item.name = name
             item.imageURL = imageURL
             item.referenceImageId = referenceImageId
+            item.isFavourite = isFavourite
 
         do {
             try context.save()
@@ -89,8 +100,9 @@ class CatBreedViewModel: ObservableObject {
             errorMessage = "Failed to fetch data from Core Data: \(error.localizedDescription)"
         }
     }
-    private func updateBreed(_ breed: Item, with url: URL?) {
+    private func updateBreed(_ breed: Item, with url: URL?, isFavourite: Bool = false) {
         breed.imageURL = url?.absoluteString
+        breed.isFavourite = isFavourite
            
            do {
                try context.save()
@@ -98,4 +110,59 @@ class CatBreedViewModel: ObservableObject {
                errorMessage = "Failed to update item: \(error.localizedDescription)"
            }
        }
+    func toggleFavorite(for breed: Item) {
+        if breed.isFavourite {
+            // Remove from favorites
+            networkService.fetchFavouriteBreeds()
+                .flatMap { [weak self] favouriteBreeds -> AnyPublisher<Bool, Error> in
+                    guard let self = self else {
+                        return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
+                    }
+                    
+                    if let matchingFavourite = favouriteBreeds.first(where: { $0.imageId == breed.referenceImageId }) {
+                        return self.networkService.deleteFromFavorites(favoriteId: matchingFavourite.id)
+                    } else {
+                        return Fail(error: URLError(.fileDoesNotExist)).eraseToAnyPublisher()
+                    }
+                }
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { [weak self] completion in
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                }, receiveValue: { [weak self] success in
+                    if success {
+                        breed.isFavourite.toggle()
+                        do {
+                            try self?.context.save()
+                        } catch {
+                            self?.errorMessage = "Failed to update favorite status: \(error.localizedDescription)"
+                        }
+                        self?.fetchBreedsFromCoreData()  // Refresh the data to reflect changes
+                    }
+                })
+                .store(in: &cancellables)
+
+        } else {
+            // Add to favorites
+            networkService.addToFavorites(imageId: breed.referenceImageId ?? "")
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { [weak self] completion in
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                }, receiveValue: { [weak self] success in
+                    if success {
+                        breed.isFavourite.toggle()
+                        do {
+                            try self?.context.save()
+                        } catch {
+                            self?.errorMessage = "Failed to update favorite status: \(error.localizedDescription)"
+                        }
+                        self?.fetchBreedsFromCoreData()  // Refresh the data to reflect changes
+                    }
+                })
+                .store(in: &cancellables)
+        }
+    }
 }

@@ -40,16 +40,26 @@ struct ContentView: View {
                                             .clipped()
                                             .cornerRadius(10)
                                     }
-                                    Text(item.name ?? "Unknown Name")
-                                        .font(.caption)
-                                        .lineLimit(1)
+                                    HStack {
+                                        Text(item.name ?? "Unknown Name")
+                                            .font(.caption)
+                                            .lineLimit(1)
+                                        
+                                        Button(action: {
+                                            viewModel.toggleFavorite(for: item)
+                                        }) {
+                                            Image(systemName: item.isFavourite ? "star.fill" : "star")
+                                            .foregroundColor(item.isFavourite ? .yellow : .gray)
+                                            .padding(5)
+                                        }
+                                    }
                                 }
                             }
                         }
                         .padding(.horizontal)
                     }
                 }
-                .navigationTitle("Items Grid")
+                .navigationTitle("Cats Breed")
             }
         }
     }
