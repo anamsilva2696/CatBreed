@@ -12,6 +12,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel: CatBreedViewModel
     @State private var searchText: String = ""
+    @State private var showFavoritesOnly: Bool = false
 
     init(viewContext: NSManagedObjectContext) {
         _viewModel = StateObject(wrappedValue: CatBreedViewModel(context: viewContext))
@@ -23,14 +24,15 @@ struct ContentView: View {
         ]
     
     var filteredBreeds: [Item] {
-            if searchText.isEmpty {
-                return viewModel.items
-            } else {
-                return viewModel.items.filter { breed in
-                    breed.name?.lowercased().contains(searchText.lowercased()) ?? false
-                }
+        let breeds = showFavoritesOnly ? viewModel.items.filter { $0.isFavourite } : viewModel.items
+        if searchText.isEmpty {
+            return breeds
+        } else {
+            return breeds.filter { breed in
+                breed.name?.lowercased().contains(searchText.lowercased()) ?? false
             }
         }
+    }
     
         var body: some View {
             NavigationView {
@@ -48,6 +50,29 @@ struct ContentView: View {
                             .padding(.vertical)
                     }
                     .padding(.horizontal)
+                    
+                    HStack {
+                        Button(action: {
+                            showFavoritesOnly = false
+                        }) {
+                            Text("Show All")
+                                .padding()
+                                .background(showFavoritesOnly ? Color.gray : Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                                        
+                        Button(action: {
+                            showFavoritesOnly = true
+                        }) {
+                            Text("Show Favorites")
+                                .padding()
+                                .background(showFavoritesOnly ? Color.blue : Color.gray)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                            }
+                        }
+                        .padding(.horizontal)
                     
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
