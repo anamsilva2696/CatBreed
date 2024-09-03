@@ -11,6 +11,7 @@ import CoreData
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel: CatBreedViewModel
+    @State private var searchText: String = ""
 
     init(viewContext: NSManagedObjectContext) {
         _viewModel = StateObject(wrappedValue: CatBreedViewModel(context: viewContext))
@@ -20,7 +21,17 @@ struct ContentView: View {
             GridItem(.flexible()),
             GridItem(.flexible())
         ]
-
+    
+    var filteredBreeds: [Item] {
+            if searchText.isEmpty {
+                return viewModel.items
+            } else {
+                return viewModel.items.filter { breed in
+                    breed.name?.lowercased().contains(searchText.lowercased()) ?? false
+                }
+            }
+        }
+    
         var body: some View {
             NavigationView {
                 VStack {
@@ -29,10 +40,18 @@ struct ContentView: View {
                             .foregroundColor(.red)
                             .padding()
                     }
-
+                    
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                        TextField("Search Breeds", text: $searchText)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.vertical)
+                    }
+                    .padding(.horizontal)
+                    
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 20) {
-                            ForEach(viewModel.items, id: \.self) { item in
+                            ForEach(filteredBreeds, id: \.self) { item in
                                 NavigationLink(destination: BreedDetailView(viewModel: viewModel, breed: item)) {
                                     VStack {
                                         if let imageURLString = item.imageURL, let imageURL = URL(string: imageURLString) {
