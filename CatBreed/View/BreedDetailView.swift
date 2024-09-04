@@ -31,7 +31,8 @@ struct BreedDetailView: View {
                     Image(systemName: breed.isFavourite ? "star.fill" : "star")
                     .foregroundColor(breed.isFavourite ? .yellow : .gray)
                     .padding(5)
-                }
+                }.accessibilityIdentifier("favoriteButton")
+
             }
             Text(breed.breedDescription ?? "No Breed Description")
                 .font(.body)

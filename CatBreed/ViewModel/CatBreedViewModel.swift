@@ -61,7 +61,7 @@ class CatBreedViewModel: ObservableObject {
     }
 
    
-    private func saveBreedsToCoreData(id: String, name: String, imageURL: String?, referenceImageId: String, isFavourite: Bool = false, description: String) -> Item {
+    func saveBreedsToCoreData(id: String, name: String, imageURL: String?, referenceImageId: String, isFavourite: Bool = false, description: String) -> Item {
             let item = Item(context: context)
             item.id = id
             item.name = name
